@@ -43,7 +43,13 @@ function App() {
     setNotification("GET");
   };
 
-  const cancelBtn = () => {};
+  const cancelBtn = () => {
+    setDataBlog({
+      title: "",
+      message: "",
+      author: "",
+    });
+  };
 
   const changeHandler = (e) => {
     setDataBlog((prevState) => ({
@@ -92,8 +98,10 @@ function App() {
             required
           ></input>
         </div>
-        <button className="submitbtn">Submit</button>
-        <button className="cancelbtn" onClick={cancelBtn}>
+        <button type="submit" className="submitbtn">
+          Submit
+        </button>
+        <button type="reset" className="cancelbtn" onClick={cancelBtn}>
           Cancel
         </button>
         <button className="submitbtn">Update</button>

@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
-import '../App.css'
+import './Card.css'
 
 export default function Card(props){
 const {obj, deleteBtn, fillFormForUpdate} = props;

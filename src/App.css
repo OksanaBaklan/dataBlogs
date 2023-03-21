@@ -8,15 +8,7 @@ form {
   width: 500px;
   padding: 10px;
 }
-.card {
-  display: inline-block;
-  text-align: left;
-  border: 1px solid skyblue;
-  border-radius: 10%;
-  box-shadow: 10px 10px grey;
-  margin: 10px;
-  padding: 10px;
-}
+
 .cancelbtn {
   background-color: red;
   color: white;
@@ -25,9 +17,15 @@ form {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: bold;
 }
 
-/* Set a style for all buttons */
+.update-icon {
+  background-color: white;
+  border: none;
+  float: right;
+}
+
 .submitbtn {
   background-color: #04aa44;
   color: white;
@@ -36,6 +34,18 @@ form {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: bold;
+}
+
+.updatebtn {
+  background-color: #047baa;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .deletebtn {
@@ -61,4 +71,14 @@ input {
   display: inline-block;
   width: 140px;
   text-align: right;
+}
+
+.cards {
+  display: inline-block;
+  text-align: left;
+  border: 1px solid skyblue;
+  border-radius: 10%;
+  box-shadow: 10px 10px grey;
+  margin: 10px;
+  padding: 10px;
 }

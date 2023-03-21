@@ -1,114 +1,105 @@
 import "./App.css";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import Header from "./Component/Header";
 import Card from "./Component/Card";
+import Form from "./Component/Form";
+
+import axios from "axios";
 
 function App() {
-  // const [title, setTitle] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [author, setAuthor] = useState("");
-
-  const [dataBlog, setDataBlog] = useState({
+  const [posts, setPosts] = useState({
     title: "",
     message: "",
     author: "",
   });
-  const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState();
   const [details, setDetails] = useState([]);
+  const [update, setUpdate] = useState(false);
 
-  async function getPost() {
-    const res = await axios.get("https://dilshod.onrender.com/posts");
-    console.log(res.data);
-    setDetails(res.data);
-    setNotification(null);
-    // console.log(details);
+  async function getPosts() {
+    try {
+      const response = await axios.get("https://dilshod.onrender.com/posts");
+      setDetails(response.data);
+      setNotification(null);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  // getPost();
   useEffect(() => {
-    getPost();
+    getPosts();
   }, [notification]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const data = { ...dataBlog };
-    await axios.post("https://dilshod.onrender.com/posts", dataBlog);
+    if (!update) {
+      await axios.post("https://dilshod.onrender.com/posts", posts);
+    } else {
+      await axios.patch(
+        `https://dilshod.onrender.com/posts/${posts._id}`,
+        posts
+      );
+      setUpdate(false);
+    }
 
-    setDataBlog({
+    // clear inputs
+    setPosts({
       title: "",
       message: "",
       author: "",
     });
 
-    setNotification("GET");
+    // set notification
+    setNotification("update");
   };
 
   const cancelBtn = () => {
-    setDataBlog({
+    setPosts({
       title: "",
       message: "",
       author: "",
     });
+    setUpdate(false);
   };
 
-  const changeHandler = (e) => {
-    setDataBlog((prevState) => ({
+  const changeHandler = (e) =>
+    setPosts((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
+
+  const deleteBtn = async (id) => {
+    await axios.delete(`https://dilshod.onrender.com/posts/${id}`);
+    getPosts();
+  };
+
+  const fillFormForUpdate = (id) => {
+    const updatingPost = details.find((obj) => obj._id === id);
+    setPosts(updatingPost);
+    setUpdate(true);
   };
 
   return (
     <div className="App">
-      <h2>Create a new post:</h2>
-      <p>
-        CRUD = Create (POST), Read (GET), Update (PATCH or PUT), Delete (DELETE){" "}
-      </p>
-      <form onSubmit={handleSubmit}>
-        <div className="block">
-          <label htmlFor="title">Title: </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={dataBlog.title}
-            onChange={changeHandler}
-            required
-          ></input>
-        </div>
-        <div className="block">
-          <label htmlFor="message">Message: </label>
-          <input
-            type="text"
-            id="message"
-            name="message"
-            value={dataBlog.message}
-            onChange={changeHandler}
-            required
-          ></input>
-        </div>
-        <div className="block">
-          <label htmlFor="author">Author: </label>
-          <input
-            type="text"
-            id="author"
-            name="author"
-            value={dataBlog.author}
-            onChange={changeHandler}
-            required
-          ></input>
-        </div>
-        <button type="submit" className="submitbtn">
-          Submit
-        </button>
-        <button type="reset" className="cancelbtn" onClick={cancelBtn}>
-          Cancel
-        </button>
-        <button className="submitbtn">Update</button>
-      </form>
+      <Header />
+      <Form
+        handleSubmit={handleSubmit}
+        posts={posts}
+        changeHandler={changeHandler}
+        update={update}
+        cancelBtn={cancelBtn}
+      />
+
       <div>
         {details?.length !== 0 ? (
-          details?.map((obj) => <Card obj={obj} key={obj._id} />)
+          details?.map((obj) => (
+            <Card
+              obj={obj}
+              key={obj._id}
+              deleteBtn={deleteBtn}
+              fillFormForUpdate={fillFormForUpdate}
+            />
+          ))
         ) : (
           <h3>Loading ...</h3>
         )}
